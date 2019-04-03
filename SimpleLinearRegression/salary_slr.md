@@ -2,7 +2,7 @@ Predicting Salaries by Level of Experience
 ================
 Anders Poirel
 
-*I thought it would be interesting to redo exercises from the online course Data Science AZ in R more thorouhgly*
+*I thought it would be interesting to redo exercises from the online course Data Science AZ more thouroughly in R*
 
 We load the data:
 
@@ -11,7 +11,7 @@ library(ggplot2)
 saldata <- read.csv('SalaryData.csv')
 ```
 
-Examine descriptive statistics for data
+Examine descriptive statistics for data:
 
 ``` r
 summary(saldata)
@@ -25,7 +25,7 @@ summary(saldata)
     ##  3rd Qu.: 7.700   3rd Qu.:100545  
     ##  Max.   :10.500   Max.   :122391
 
-Fit the linear regression model and view statistics for the model
+Fit the linear regression model and view statistics for the model:
 
 ``` r
 fm_exp <- lm(saldata$Salary ~ saldata$YearsExperience, saldata)
@@ -51,10 +51,12 @@ summary(fm_exp)
     ## Multiple R-squared:  0.957,  Adjusted R-squared:  0.9554 
     ## F-statistic: 622.5 on 1 and 28 DF,  p-value: < 2.2e-16
 
-Plots the data and the regression line using ggplot
+Plots the data and the regression line using ggplot:
 
 ``` r
-ggplot(saldata, aes(x = saldata$YearsExperience, y = saldata$Salary)) + geom_point() + labs(title = "Salary by Years of Experience", x ="Years of Experience", y= "Salary ($)") + stat_smooth(method= "lm", se = FALSE) 
+ggplot(saldata, aes(x = saldata$YearsExperience, y = saldata$Salary)) + geom_point() +
+  labs(title = "Salary by Years of Experience", x ="Years of Experience", y= "Salary ($)") +
+  stat_smooth(method= "lm", se = FALSE) 
 ```
 
 ![](salary_slr_files/figure-markdown_github/unnamed-chunk-4-1.png)
