@@ -2,7 +2,9 @@ Predicting Startup Profitability
 ================
 Anders Poirel
 
-*Another exercise done using dataset from the Data Science AZ course.*
+*Another exercise done using dataset from the Data Science A-Z course.*
+
+The goal is predict for startup profitability. The potential predictor are administrative spending, marketing spending, R&D spending and location (New York or California).
 
 Load the data into R:
 
@@ -107,4 +109,13 @@ summary(fit)
     ## Multiple R-squared:  0.9505, Adjusted R-squared:  0.9483 
     ## F-statistic: 450.8 on 2 and 47 DF,  p-value: < 2.2e-16
 
-None of the remaining prdictors have a p-value above 0.1 so the process of backwards elimination is complete.
+None of the remaining predictors have a p-value above 0.1 so the process of backwards elimination is complete. Adjusted R^2 had increased as we removed variables, which suggests that this improved the model.
+
+The regression coefficients can now be used to forecast the profitability of a startup if we know its R&D and marketing spending - For instance for R&D spending of 170,000$ and amrketing of 500,000$
+
+``` r
+profit_forecast <- fit$coefficients[[1]] + fit$coefficients[[2]] * 170000 + fit$coefficients[[3]] * 500000
+profit_forecast
+```
+
+    ## [1] 197349.1
