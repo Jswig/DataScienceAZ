@@ -1,0 +1,68 @@
+---
+title: "Logistic Regression"
+output: github_document
+author: "Anders Poirel"
+date: 06-23-2019
+---
+
+*More practice in R, especially learning how to do stuff in the tidyverse.*
+
+```{r, message = FALSE}
+library(tidyverse)
+```
+
+we want to build a model predicting whether a customer opened a promotional email
+Read the data:
+
+```{r, message = FALSE}
+data <- read_csv("P12-Email-Offer.csv")
+```
+We have a sample of a 100 customers, and for each of them  age, gender and whether they opned the email
+```{r}
+print(data)
+```
+
+This is a classification problem in with only two possible categories - the customer opens the email (1) or doesn't (0). A logistic regression model may thus be appropriate for this problem:
+
+```{r}
+lr_model <- glm(TookAction ~ Age + Gender, data = data, family = binomial)
+summary(lr_model)
+```
+
+We use the fitted model to find the predicted values for the original dataset. To obtain 0-1 values instead of probabilities, we predict 1 for probabilities >= 0.5 and 0 otherwise.
+
+```{r}
+preds <- predict(lr_model, type = "response")
+preds <- if_else(preds >= 0.5, 1, 0)
+```
+
+Use these predictions to compute the number of true positives and negatives, and of false positive and negatives:
+```{r}
+t_pos <- sum(if_else(data$TookAction == 1 & preds == 1, 1, 0))
+t_neg <- sum(if_else(data$TookAction == 0 & preds == 0, 1, 0))
+f_pos <- sum(if_else(data$TookAction == 0 & preds == 1, 1, 0))
+f_neg <- sum(if_else(data$TookAction == 1 & preds == 0, 1, 0))
+```
+
+
+We can now visualize the model's predictions as follows:
+```{r}
+coeffs <- c(t_neg, f_neg, f_pos, t_pos) 
+tr <- c(0, 1, 0, 1) # values used to build confusion matrix
+pr <- c(0, 0, 1, 1) 
+
+confusion_m <- ggplot(mapping = aes(x = tr, y = pr, fill = coeffs)) + 
+  geom_tile() +
+  geom_text(mapping = aes(label = coeffs), color = "white") +
+  guides(fill = F) +
+  coord_equal() +
+  labs(title = "Confusion matrix", x = "true", y = "predicted") +
+  scale_x_continuous(breaks = c(0,1)) +
+  scale_y_continuous(breaks = c(0,1)) +
+  theme_minimal()
+  
+confusion_m
+```
+
+
+
