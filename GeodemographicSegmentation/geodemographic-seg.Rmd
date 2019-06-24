@@ -1,0 +1,25 @@
+---
+title: "Geodemographic Segmentation Model"
+output: github_document
+author: "Anders Poirel"
+date: "24/06/2019"
+---
+
+FIXME: add problem description.
+
+```{r, message = FALSE}
+library(tidyverse)
+```
+Read the data and preview it:
+```{r, message = FALSE}
+churn_data <- read_csv("P12-Churn-Modelling.csv")
+churn_data
+```
+To use logistic regression, we want all of our data to be in numberical form so we create dummy variables for location and gender:
+
+```{r}
+library(fastDummies)
+dummy_cols(churn_data, select_columns = c("Geography", "Gender"))
+churn_data
+```
+
